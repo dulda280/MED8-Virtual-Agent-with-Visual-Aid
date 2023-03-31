@@ -10,6 +10,9 @@ intents:
   - bot_challenge
   - fetch_data
   - save_data
+  - blood_pressure
+  - feeling_recently
+  - mood_recently
 entities:
   - data
   - input
@@ -33,6 +36,15 @@ responses:
 
   utter_iamabot:
   - text: "I am a bot, powered by Rasa."
+
+  utter_blood_pressure:
+      - text: "How has your blood pressure been lately?"
+
+  utter_feeling_recently:
+      - text: "How have you been feeling recently?"
+
+  utter_mood_recently:
+      - text: "How has your mood been recently??"
 
 session_config:
   session_expiration_time: 60

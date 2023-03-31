@@ -115,5 +115,53 @@ nlu:
     - depression
     - weight
     
-    
+- intent: blood_pressure
+  examples: |
+    - Normal and stable
+    - Higher than recommended  norm 
+    - Lower than recommended norm
+    - Normal
+    - Fine
+    - Good
+    - Bad
+    - High
+    - Low
+    - Too high
+    - Too low
+    - I don't know
+    - I haven't measured it
+
+- intent: feeling_recently
+  examples:
+    - Very good
+    - Very well
+    - Normal
+    - Ok
+    - Okay
+    - Fine
+    - Good
+    - Not so good
+    - Bad
+    - Awful
+    - Shitty
+    - Horrible
+    - I don't know
+
+- intent: mood_recently
+  examples:
+    - Very good
+    - Very well
+    - Normal
+    - Ok
+    - Okay
+    - Fine
+    - Good
+    - Not so good
+    - Bad
+    - Awful
+    - Shitty
+    - Horrible
+    - I don't know
+    - I've been sad
+    - I've been happy
 
