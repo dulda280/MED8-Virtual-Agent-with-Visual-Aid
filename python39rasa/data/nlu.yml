@@ -132,7 +132,7 @@ nlu:
     - I haven't measured it
 
 - intent: feeling_recently
-  examples:
+  examples: |
     - Very good
     - Very well
     - Normal
@@ -148,7 +148,7 @@ nlu:
     - I don't know
 
 - intent: mood_recently
-  examples:
+  examples: |
     - Very good
     - Very well
     - Normal
