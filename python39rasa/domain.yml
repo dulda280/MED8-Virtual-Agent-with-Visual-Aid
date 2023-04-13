@@ -44,7 +44,7 @@ responses:
       - text: "How have you been feeling recently?"
 
   utter_mood_recently:
-      - text: "How has your mood been recently??"
+      - text: "How has your mood been recently?"
 
 session_config:
   session_expiration_time: 60

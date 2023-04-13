@@ -165,3 +165,23 @@ nlu:
     - I've been sad
     - I've been happy
 
+- intent: prom_Answer
+  examples: |
+    - 1
+    - 2
+    - 3
+    - 4
+    - 5
+
+- intent: prom_reschedule
+  examples: |
+    - I would like to [11:00]{"entity":"clock","value":"time"}
+    - [10:00]{"entity":"clock","value":"time"} would be great
+
+- intent: test_prom1
+  examples: |
+    - test PROM1
+
+- intent: test_prom2
+  examples: |
+    - test PROM2

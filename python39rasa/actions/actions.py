@@ -68,3 +68,27 @@ class saveData(Action):
         dispatcher.utter_message(text=msg)
         df.to_csv("TestData.csv", index=False)
         return []
+
+class initiate_promone(Action):
+
+    def name(self) -> Text:
+        return "initiate_promone"
+
+    def run(self, dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+        msg = f"this is the test for prom 1"
+        dispatcher.utter_message(text=msg)
+        return []
+
+class initiate_promtwo(Action):
+
+    def name(self) -> Text:
+        return "initiate_promtwo"
+
+    def run(self, dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+        msg = f"this is the test for prom 2"
+        dispatcher.utter_message(text=msg)
+        return []
