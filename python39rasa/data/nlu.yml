@@ -1,6 +1,15 @@
 version: "3.1"
 
 nlu:
+
+- intent: daily
+  examples:
+  - Yes, my measurements are ...
+  - My measurements are ...
+  - Not now
+  - I want to do it later
+  - I would like to do it later
+
 - intent: greet
   examples: |
     - hey
@@ -20,7 +29,12 @@ nlu:
     - sur dude
     - my dude
     
-
+- intent: start_PROM
+  examples: |
+    - Yes. Let us get started.
+    - No. I need to do something right now.
+    - How long is it going to take?
+    
 - intent: goodbye
   examples: |
     - cu
@@ -164,6 +178,9 @@ nlu:
     - I don't know
     - I've been sad
     - I've been happy
+
+
+
 
 - intent: prom_Answer
   examples: |

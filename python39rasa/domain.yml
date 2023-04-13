@@ -13,6 +13,8 @@ intents:
   - blood_pressure
   - feeling_recently
   - mood_recently
+  - prom_reschedule
+  - start_PROM
 entities:
   - data
   - input
@@ -20,6 +22,12 @@ entities:
 responses:
   utter_greet:
   - text: "Hey! How are you?"
+
+  utter_daily:
+  - text: "Hey! Remember to take your daily measurements."
+
+  utter_start_PROM:
+  - text: "Now that you have taken your blood pressure, you could also answer the PROM that is scheduled for today?"
 
   utter_cheer_up:
   - text: "Here is something to cheer you up:"
@@ -45,6 +53,12 @@ responses:
 
   utter_mood_recently:
       - text: "How has your mood been recently?"
+
+  utter_prom_reschedule:
+    - text: "Would you like to reschedule your PROM?"
+
+
+
 
 session_config:
   session_expiration_time: 60
