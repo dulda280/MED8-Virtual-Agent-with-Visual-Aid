@@ -5,6 +5,7 @@ from rasa_sdk.executor import CollectingDispatcher
 import pandas as pd
 import datetime
 import math
+import firebase_admin
 
 class fetchData(Action):
 
@@ -28,6 +29,23 @@ class fetchData(Action):
         msg = f"the {data} from yesterday is {df.iloc[-1]}"
         dispatcher.utter_message(text=msg)
         return []
+
+class saveToFB(Action):
+
+    def name(self) -> text:
+        return "saveToFB"
+
+    def run(self, dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+
+        data = next(tracker.get_latest_entity_values("data"), None)
+        input = next(tracker.get_latest_entity_values("input"), None)
+
+        cred_obj = firebase_admin.credentials.Certificate('projectvafirebase-firebase-adminsdk-xscfk-a3affb4105.json')
+        default_app = firebase_admin.initialize_app(cred_object, {
+            'databaseURL': databaseURL
+        })
 
 class saveData(Action):
 
