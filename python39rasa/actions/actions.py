@@ -77,7 +77,38 @@ class initiate_promone(Action):
     def run(self, dispatcher: CollectingDispatcher,
             tracker: Tracker,
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
-        msg = f"this is the test for prom 1"
+        msg = f"Are you ready for prom 1?"
+        dispatcher.utter_message(text=msg)
+        return []
+
+class promoneqone(Action):
+    def name(self) -> Text:
+        return "promoneqone"
+
+    def run(self, dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+        questionList = [["question number", "question text", "answer"],
+                    [1, "question 1", ""],
+                    [2, "question 2", ""]]
+
+        with open('tempfile.csv', 'w', newline='') as file:
+            writer = csv.writer(file)
+            writer.writerows(questionList)
+        msg = f"this is the first question for prom 1"
+        dispatcher.utter_message(text=msg)
+        return []
+
+class promoneqtwo(Action):
+    def name(self) -> Text:
+        return "promoneqtwo"
+
+    def run(self, dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+        answer = next(tracker.get_latest_entity_values("answer"), None)
+
+        msg = f"this is the second question for prom 1"
         dispatcher.utter_message(text=msg)
         return []
 
@@ -89,6 +120,39 @@ class initiate_promtwo(Action):
     def run(self, dispatcher: CollectingDispatcher,
             tracker: Tracker,
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
-        msg = f"this is the test for prom 2"
+        msg = f"Are you ready for prom 2?"
+        dispatcher.utter_message(text=msg)
+        return []
+
+class promtwoqone(Action):
+    def name(self) -> Text:
+        return "promtwoqone"
+
+    def run(self, dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+        msg = f"this is the first question for prom 2"
+        dispatcher.utter_message(text=msg)
+        return []
+
+class promtwoqtwo(Action):
+    def name(self) -> Text:
+        return "promtwoqtwo"
+
+    def run(self, dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+        msg = f"this is the second question for prom 2"
+        dispatcher.utter_message(text=msg)
+        return []
+
+class prom_end(Action):
+    def name(self) -> Text:
+        return "prom_end"
+
+    def run(self, dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+        msg = f"Thank you for your answers"
         dispatcher.utter_message(text=msg)
         return []

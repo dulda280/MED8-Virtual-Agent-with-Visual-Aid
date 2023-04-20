@@ -180,15 +180,21 @@ nlu:
     - I've been happy
 
 
-
-
 - intent: prom_Answer
   examples: |
-    - 1
-    - 2
-    - 3
-    - 4
-    - 5
+    - [very bad](answer)
+    - [somewhat bad](answer)
+    - [neutral](answer)
+    - [somewhat good](answer)
+    - [very good](answer)
+
+- lookup: answer
+  examples: |
+    - very bad
+    - somewhat bad
+    - neutral
+    - somewhat good
+    - very good
 
 - intent: prom_reschedule
   examples: |
