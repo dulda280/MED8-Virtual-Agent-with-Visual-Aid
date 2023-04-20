@@ -15,6 +15,9 @@ intents:
   - mood_recently
   - prom_reschedule
   - start_PROM
+  - test_prom1
+  - prom_Answer
+  - test_prom2
 entities:
   - data
   - input

@@ -32,7 +32,7 @@ class fetchData(Action):
 
 class saveToFB(Action):
 
-    def name(self) -> text:
+    def name(self) -> Text:
         return "saveToFB"
 
     def run(self, dispatcher: CollectingDispatcher,
@@ -42,10 +42,12 @@ class saveToFB(Action):
         data = next(tracker.get_latest_entity_values("data"), None)
         input = next(tracker.get_latest_entity_values("input"), None)
 
-        cred_obj = firebase_admin.credentials.Certificate('projectvafirebase-firebase-adminsdk-xscfk-a3affb4105.json')
-        default_app = firebase_admin.initialize_app(cred_object, {
-            'databaseURL': databaseURL
+        cred_obj = firebase_admin.credentials.Certificate("resq-rasachatbot-firebase-adminsdk-uxb51-8aa0ff5053.json")
+        default_app = firebase_admin.initialize_app(cred_obj, {
+            "databaseURL": "https://resq-rasachatbot-default-rtdb.europe-west1.firebasedatabase.app/"
         })
+
+
 
 class saveData(Action):
 
