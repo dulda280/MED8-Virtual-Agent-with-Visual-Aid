@@ -13,7 +13,7 @@ default_app = firebase_admin.initialize_app(cred_obj, {
     "databaseURL": "https://resq-rasachatbot-default-rtdb.europe-west1.firebasedatabase.app/"
 })
 
-randNum = 75146875
+randNum = 24658147
 
 '''
 #To create a new table
@@ -39,7 +39,7 @@ dict[randNum] = {
     "weight": [0]
 }
 ref.set(dict)
-'''
+
 
 #when a user updates the measurements
 ref = db.reference("/measurement Table/" + str(randNum))
@@ -51,3 +51,11 @@ for key, value in dict.items():
     value.append(154)
 
 ref.set(dict)
+'''
+
+ref = db.reference("/measurement Table/" + str(randNum))
+
+dict = ref.get()
+
+dict["blood pressure"].append(242)
+print(dict)

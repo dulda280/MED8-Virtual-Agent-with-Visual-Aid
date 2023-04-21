@@ -4,11 +4,11 @@ nlu:
 
 - intent: daily
   examples: |
-  - Yes, my measurements are ...
-  - My measurements are ...
-  - Not now
-  - I want to do it later
-  - I would like to do it later
+    - Yes, my measurements are ...
+    - My measurements are ...
+    - Not now
+    - I want to do it later
+    - I would like to do it later
 
 - intent: greet
   examples: |

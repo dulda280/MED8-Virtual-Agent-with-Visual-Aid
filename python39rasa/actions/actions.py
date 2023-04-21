@@ -38,14 +38,28 @@ class saveToFB(Action):
     def run(self, dispatcher: CollectingDispatcher,
             tracker: Tracker,
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
-
         data = next(tracker.get_latest_entity_values("data"), None)
         input = next(tracker.get_latest_entity_values("input"), None)
+        userId = 24658147
 
         cred_obj = firebase_admin.credentials.Certificate("resq-rasachatbot-firebase-adminsdk-uxb51-8aa0ff5053.json")
         default_app = firebase_admin.initialize_app(cred_obj, {
             "databaseURL": "https://resq-rasachatbot-default-rtdb.europe-west1.firebasedatabase.app/"
         })
+
+        # when a user updates the measurements
+        ref = db.reference("/measurement Table/" + str(userId))
+
+        dict = ref.get()
+        print(dict)
+
+        dict[str(data)].append(int(input))
+
+        ref.set(dict)
+
+        msg = f"thank you for telling me about your {data}. Your input was {input}. "
+        dispatcher.utter_message(text=msg)
+        return []
 
 
 
