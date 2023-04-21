@@ -9,8 +9,6 @@ intents:
   - mood_unhappy
   - bot_challenge
   - fetch_data
-  - save_blood_pressure
-  - save_weight
   - blood_pressure
   - feeling_recently
   - mood_recently
@@ -19,6 +17,7 @@ intents:
   - test_prom1
   - prom_Answer
   - test_prom2
+  - save_data
 entities:
   - data
   - input

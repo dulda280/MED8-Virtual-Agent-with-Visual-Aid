@@ -1,61 +1,16 @@
-import random
-import firebase_admin
-import json
+from spellchecker import SpellChecker
 
-from firebase_admin import db
+spell = SpellChecker()
 
+data = "weght"
 
-data = "blood_pressure"
-input = 256
+text = list(data.split(" "))
+# find those words that may be misspelled
+misspelled = spell.unknown(text)
 
-cred_obj = firebase_admin.credentials.Certificate("resq-rasachatbot-firebase-adminsdk-uxb51-8aa0ff5053.json")
-default_app = firebase_admin.initialize_app(cred_obj, {
-    "databaseURL": "https://resq-rasachatbot-default-rtdb.europe-west1.firebasedatabase.app/"
-})
+for index, word in enumerate(text):
+    if word in misspelled:
+        text[index] = spell.correction(word)
 
-randNum = 24658147
-
-'''
-#To create a new table
-ref = db.reference("/")
-ref.set({
-    "table name": "measurement Table"
-})
-ref = db.reference("/measurement Table")
-ref.set({
-    randNum:{
-        "blood pressure": [0],
-        "weight": [0]
-    }
-})
-
-#When a new user is created
-ref = db.reference("/measurement Table")
-
-dict = ref.get()
-print(dict)
-dict[randNum] = {
-    "blood pressure": [0],
-    "weight": [0]
-}
-ref.set(dict)
-
-
-#when a user updates the measurements
-ref = db.reference("/measurement Table/" + str(randNum))
-
-dict = ref.get()
-print(dict)
-
-for key, value in dict.items():
-    value.append(154)
-
-ref.set(dict)
-'''
-
-ref = db.reference("/measurement Table/" + str(randNum))
-
-dict = ref.get()
-
-dict["blood pressure"].append(242)
-print(dict)
+newtext = ' '.join(text)
+print(newtext)

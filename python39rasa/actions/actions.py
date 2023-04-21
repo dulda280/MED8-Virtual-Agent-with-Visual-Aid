@@ -8,6 +8,7 @@ import datetime
 import math
 import firebase_admin
 import csv
+from spellchecker import SpellChecker
 
 class fetchData(Action):
 
@@ -32,14 +33,15 @@ class fetchData(Action):
         dispatcher.utter_message(text=msg)
         return []
 
-class saveBPToFB(Action):
+class saveToFB(Action):
 
     def name(self) -> Text:
-        return "saveBPToFB"
+        return "saveToFB"
 
     def run(self, dispatcher: CollectingDispatcher,
             tracker: Tracker,
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+        data = next(tracker.get_latest_entity_values("data"), None)
         input = next(tracker.get_latest_entity_values("input"), None)
         #userId = tracker.sender_id
         userId = 24658147
@@ -54,48 +56,43 @@ class saveBPToFB(Action):
 
         dict = ref.get()
 
-        inputList = input.split("/", 2)
+        spell = SpellChecker()
 
-        dict["sysbp"].append(int(inputList[0]))
-        dict["diabp"].append(int(inputList[1]))
+        text = list(str(data).split(" "))
+        # find those words that may be misspelled
+        misspelled = spell.unknown(text)
 
+        for index, word in enumerate(text):
+            if word in misspelled:
+                print(word)
+                text[index] = spell.correction(word)
+                print(text[index])
 
-        ref.set(dict)
-        firebase_admin.delete_app(default_app)
+        newtext = ' '.join(text)
+        print(newtext)
 
-        msg = f"thank you for telling me about your blood pressure. Your input was {input}. "
-        dispatcher.utter_message(text=msg)
-        return []
+        if newtext == "blood pressure":
+            inputList = input.split("/", 2)
 
+            dict["sysbp"].append(int(inputList[0]))
+            dict["diabp"].append(int(inputList[1]))
 
-class saveWToFB(Action):
+        elif newtext == "weight":
+            dict["weight"].append(int(input))
 
-    def name(self) -> Text:
-        return "saveWToFB"
+        else:
+            msg = f"Sorry. I think you misspelled. Could you repeat it for me?"
 
-    def run(self, dispatcher: CollectingDispatcher,
-            tracker: Tracker,
-            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
-        input = next(tracker.get_latest_entity_values("input"), None)
-        userId = 24658147
+            ref.set(dict)
+            firebase_admin.delete_app(default_app)
 
-        cred_obj = firebase_admin.credentials.Certificate("resq-rasachatbot-firebase-adminsdk-uxb51-8aa0ff5053.json")
-        default_app = firebase_admin.initialize_app(cred_obj, {
-            "databaseURL": "https://resq-rasachatbot-default-rtdb.europe-west1.firebasedatabase.app/"
-        })
-
-        # when a user updates the measurements
-        ref = db.reference("/measurement Table/" + str(userId))
-
-        dict = ref.get()
-        print(dict)
-
-        dict["weight"].append(int(input))
+            dispatcher.utter_message(text=msg)
+            return []
 
         ref.set(dict)
         firebase_admin.delete_app(default_app)
 
-        msg = f"thank you for telling me about your weight. Your input was {input}. "
+        msg = f"Thank you for telling me about your {newtext}. Your input was {input}. "
         dispatcher.utter_message(text=msg)
         return []
 

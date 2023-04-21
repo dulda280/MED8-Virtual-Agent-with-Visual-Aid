@@ -16,12 +16,8 @@ rules:
     - intent: fetch_data
     - action: fetchData
 
-- rule: save blood pressure
+- rule: save data
   steps:
-    - intent: save_blood_pressure
-    - action: saveBPToFB
+    - intent: save_data
+    - action: saveToFB
 
-- rule: save weight
-  steps:
-    - intent: save_weight
-    - action: saveWToFB
