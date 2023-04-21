@@ -207,3 +207,9 @@ nlu:
 - intent: test_prom2
   examples: |
     - test PROM2
+
+- intent: get_uid
+  examples: |
+    - what is my uid?
+    - can I get my uid?
+    - get my uid?

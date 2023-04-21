@@ -18,6 +18,7 @@ intents:
   - prom_Answer
   - test_prom2
   - save_data
+  - get_uid
 entities:
   - data
   - input
@@ -82,4 +83,4 @@ actions:
   - prom_is_rescheduled
   - saveWToFB
   - saveBPToFB
-
+  - utterUID

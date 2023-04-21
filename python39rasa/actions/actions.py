@@ -224,3 +224,16 @@ class prom_end(Action):
         msg = f"Thank you for your answers"
         dispatcher.utter_message(text=msg)
         return []
+
+class utterUID(Action):
+    def name(self) -> Text:
+        return "promtwoqtwo"
+
+    def run(self, dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+
+        UID = tracker.sender_id
+        msg = f"The UID is: " + str(UID)
+        dispatcher.utter_message(text=msg)
+        return []

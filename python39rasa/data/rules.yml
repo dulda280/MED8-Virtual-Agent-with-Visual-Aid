@@ -21,3 +21,6 @@ rules:
     - intent: save_data
     - action: saveToFB
 
+- rule: get uid
+  steps:
+    - intent: get_uid
