@@ -1,11 +1,13 @@
 from typing import Any, Text, Dict, List
 from rasa_sdk import Action, Tracker
 from rasa_sdk.executor import CollectingDispatcher
+from firebase_admin import db
 
 import pandas as pd
 import datetime
 import math
 import firebase_admin
+import csv
 
 class fetchData(Action):
 
@@ -30,15 +32,50 @@ class fetchData(Action):
         dispatcher.utter_message(text=msg)
         return []
 
-class saveToFB(Action):
+class saveBPToFB(Action):
 
     def name(self) -> Text:
-        return "saveToFB"
+        return "saveBPToFB"
 
     def run(self, dispatcher: CollectingDispatcher,
             tracker: Tracker,
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
-        data = next(tracker.get_latest_entity_values("data"), None)
+        input = next(tracker.get_latest_entity_values("input"), None)
+        #userId = tracker.sender_id
+        userId = 24658147
+
+        cred_obj = firebase_admin.credentials.Certificate("resq-rasachatbot-firebase-adminsdk-uxb51-8aa0ff5053.json")
+        default_app = firebase_admin.initialize_app(cred_obj, {
+            "databaseURL": "https://resq-rasachatbot-default-rtdb.europe-west1.firebasedatabase.app/"
+        })
+
+        # when a user updates the measurements
+        ref = db.reference("/measurement Table/" + str(userId))
+
+        dict = ref.get()
+
+        inputList = input.split("/", 2)
+
+        dict["sysbp"].append(int(inputList[0]))
+        dict["diabp"].append(int(inputList[1]))
+
+
+        ref.set(dict)
+        firebase_admin.delete_app(default_app)
+
+        msg = f"thank you for telling me about your blood pressure. Your input was {input}. "
+        dispatcher.utter_message(text=msg)
+        return []
+
+
+class saveWToFB(Action):
+
+    def name(self) -> Text:
+        return "saveWToFB"
+
+    def run(self, dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
         input = next(tracker.get_latest_entity_values("input"), None)
         userId = 24658147
 
@@ -53,14 +90,14 @@ class saveToFB(Action):
         dict = ref.get()
         print(dict)
 
-        dict[str(data)].append(int(input))
+        dict["weight"].append(int(input))
 
         ref.set(dict)
+        firebase_admin.delete_app(default_app)
 
-        msg = f"thank you for telling me about your {data}. Your input was {input}. "
+        msg = f"thank you for telling me about your weight. Your input was {input}. "
         dispatcher.utter_message(text=msg)
         return []
-
 
 
 class saveData(Action):

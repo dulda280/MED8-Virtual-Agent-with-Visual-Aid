@@ -111,16 +111,21 @@ nlu:
     - am I talking to a bot?
     - am I talking to a human?
 
-- intent: save_data
+- intent: save_blood_pressure
   examples: |
-    - my [blood pressure](data) for today is [150](input)
-    - my [depression](data) for today is [5](input)
-    - my [weight](data) for today is [80](input)
+    - my blood pressure for today is [150/85](input)
+    - so my blood pressure is [175/93](input)
+    - the blood pressure is [165/76](input)
+    - [168/76](input)
+
+- intent: save_weight
+    - my weight for today is [80](input)
+    - the scale says [86](input)
+    - the weight is around [95](input)
 
 - intent: fetch_data
   examples: |
     - how has my [blood pressure](data) been?
-    - how has my [depression](data) been?
     - how has my [weight](data) been?
 
 - lookup: data

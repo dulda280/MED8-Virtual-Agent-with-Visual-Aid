@@ -9,7 +9,8 @@ intents:
   - mood_unhappy
   - bot_challenge
   - fetch_data
-  - save_data
+  - save_blood_pressure
+  - save_weight
   - blood_pressure
   - feeling_recently
   - mood_recently
@@ -70,3 +71,16 @@ session_config:
 actions:
   - fetchData
   - saveData
+  - initiate_promone
+  - initiate_promtwo
+  - promoneqone
+  - promoneqtwo
+  - promtwoqone
+  - promtwoqtwo
+  - prom_end
+  - saveToFB
+  - reschedule_prom
+  - prom_is_rescheduled
+  - saveWToFB
+  - saveBPToFB
+
