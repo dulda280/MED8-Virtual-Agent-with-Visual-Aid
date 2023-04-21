@@ -227,7 +227,7 @@ class prom_end(Action):
 
 class utterUID(Action):
     def name(self) -> Text:
-        return "promtwoqtwo"
+        return "utterUID"
 
     def run(self, dispatcher: CollectingDispatcher,
             tracker: Tracker,

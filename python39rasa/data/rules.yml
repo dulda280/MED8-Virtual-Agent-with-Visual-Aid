@@ -24,3 +24,4 @@ rules:
 - rule: get uid
   steps:
     - intent: get_uid
+    - action: utterUID
