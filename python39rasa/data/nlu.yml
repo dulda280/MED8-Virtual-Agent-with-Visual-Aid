@@ -213,3 +213,9 @@ nlu:
     - what is my uid?
     - can I get my uid?
     - get my uid?
+
+- intent: schedule_reminders
+  examples: |
+    - I would like to be reminded at 12:30
+    - The reminder should be given at 17:15
+    - At 13:45 would be greate

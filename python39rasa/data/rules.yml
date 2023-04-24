@@ -24,4 +24,19 @@ rules:
 - rule: get uid
   steps:
     - intent: get_uid
+<<<<<<< Updated upstream
     - action: utterUID
+=======
+    - action: utterUID
+
+- rule: welcome user
+  conversation_start: true  # this rule only applies at the beginning of a conversation
+  steps:
+    - intent: greet
+    - action: measurementSetup
+
+- rule: reminder schedule
+  steps:
+    - intent: schedule_reminders
+    - action: reminderSetup
+>>>>>>> Stashed changes

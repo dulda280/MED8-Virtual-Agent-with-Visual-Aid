@@ -1,0 +1,10 @@
+[
+  {
+    "name": "data",
+    "pattern": "(\\bblood\\ pressure\\b|\\bdepression\\b|\\bweight\\b)"
+  },
+  {
+    "name": "answer",
+    "pattern": "(\\bvery\\ bad\\b|\\bsomewhat\\ bad\\b|\\bneutral\\b|\\bsomewhat\\ good\\b|\\bvery\\ good\\b)"
+  }
+]

@@ -19,6 +19,7 @@ intents:
   - test_prom2
   - save_data
   - get_uid
+  - schedule_reminders
 entities:
   - data
   - input
@@ -61,6 +62,12 @@ responses:
   utter_prom_reschedule:
     - text: "Would you like to reschedule your PROM?"
 
+  utter_welcome:
+    - text: "Hi there! What can I help you with today?"
+
+  reminderSetup:
+    - text: "Thank you! You are now ready to use the app"
+
 
 
 
@@ -84,3 +91,5 @@ actions:
   - saveWToFB
   - saveBPToFB
   - utterUID
+  - measurementSetup
+  - reminderSetup

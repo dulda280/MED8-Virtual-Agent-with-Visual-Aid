@@ -1,16 +1,30 @@
-from spellchecker import SpellChecker
+import random
+import firebase_admin
+import json
+import language_tool_python
 
-spell = SpellChecker()
+from firebase_admin import db
 
-data = "weght"
+cred_obj = firebase_admin.credentials.Certificate("resq-rasachatbot-firebase-adminsdk-uxb51-8aa0ff5053.json")
+default_app = firebase_admin.initialize_app(cred_obj, {
+    "databaseURL": "https://resq-rasachatbot-default-rtdb.europe-west1.firebasedatabase.app/"
+})
 
-text = list(data.split(" "))
-# find those words that may be misspelled
-misspelled = spell.unknown(text)
+UID = 54976352
 
-for index, word in enumerate(text):
-    if word in misspelled:
-        text[index] = spell.correction(word)
+# when a user updates the measurements
+ref = db.reference("/measurement Table")
 
-newtext = ' '.join(text)
-print(newtext)
+dict = ref.get()
+
+newEntry = {
+  'diabp': [0],
+  'sysbp': [0],
+  'weight': [0]
+}
+
+dict[str(UID)] = newEntry
+
+ref.set(dict)
+firebase_admin.delete_app(default_app)
+print(dict)

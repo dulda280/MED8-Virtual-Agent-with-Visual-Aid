@@ -237,3 +237,56 @@ class utterUID(Action):
         msg = f"The UID is: " + str(UID)
         dispatcher.utter_message(text=msg)
         return []
+
+class measurementSetup(Action):
+    def name(self) -> Text:
+        return "measurementSetup"
+
+    def run(self, dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+
+        UID = tracker.sender_id
+
+        cred_obj = firebase_admin.credentials.Certificate("resq-rasachatbot-firebase-adminsdk-uxb51-8aa0ff5053.json")
+        default_app = firebase_admin.initialize_app(cred_obj, {
+            "databaseURL": "https://resq-rasachatbot-default-rtdb.europe-west1.firebasedatabase.app/"
+        })
+
+        ref = db.reference("/measurement Table")
+
+        dict = ref.get()
+
+        newEntry = {
+            'diabp': [0],
+            'sysbp': [0],
+            'weight': [0]
+        }
+
+        dict[str(UID)] = newEntry
+
+        ref.set(dict)
+        firebase_admin.delete_app(default_app)
+
+        msg = f"Hello! Welcome to rasa."
+        dispatcher.utter_message(text=msg)
+
+        msg = f"We are going to help you build habits, of measuring bodily functions and answering PROMs"
+        dispatcher.utter_message(text=msg)
+
+        msg = f"First we need to know what time you like to take these bodily functions?"
+        dispatcher.utter_message(text=msg)
+
+        return []
+
+class reminderSetup(Action):
+
+    def name(self) -> Text:
+        return "reminderSetup"
+
+    def run(self, dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+        msg = f"Thank you for setting up the reminders!"
+        dispatcher.utter_message(text=msg)
+        return []
