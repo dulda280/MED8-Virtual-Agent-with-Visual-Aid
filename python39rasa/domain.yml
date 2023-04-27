@@ -146,50 +146,38 @@ responses:
   - text: "Thank you! You are now ready to use the app"
 
   utter_ask_question1:
-  - text: "Over the last 2 weeks, how often have you been bothered by any of the following problems?.\n
-  You can answer: Not at all, Several days, More than half the days or Nearly every day.\n
-  Little interest or pleasure in doing things"
   - text: "Over de sidste 2 uger, hvor ofte har du oplevet disse følgende ting?\n
   Du kan svare: overhovedet ikke, nogle dage, mere en halvdelen af dagene eller næsten hver dag.\n
   En lille interesse eller nydelse i at gøre ting?"
 
   utter_ask_question2:
-  - text: "Feeling down, depressed, or hopeless"
   - text: "Følte dig nede, deprimeret eller håbløs"
 
   utter_ask_question3:
-  - text: "Trouble falling or staying asleep, or sleeping too much"
   - text: "Problemer med at falde i søvn eller forblive sovende eller sove for meget?"
 
   utter_ask_question4:
-  - text: "Feeling tired or having little energy"
   - text: "Følte dig træt eller have meget lidt energi?"
 
   utter_ask_question5:
-  - text: "Poor appetite or overeating"
   - text: "Lav appetit eller overspisning?"
 
   utter_ask_question6:
-  - text: "Feeling bad about yourself—or that you are a failure or have let yourself or your family down"
   - text: "At have det dårligt med dig selv – eller at du føler dig som en fiasko eller at du har svigtet dig selv eller din familie?"
 
   utter_ask_question7:
-  - text: "Trouble concentrating on things, such as reading the newspaper or watching television"
   - text: "Problemer med at koncentrere dig om ting, såsom at læse avisen eller se fjernsyn?"
 
   utter_ask_question8:
-  - text: "Moving or speaking so slowly that other people could have noticed, or the opposite—being so fidgety or restless that you have been moving around a lot more than usual"
   - text: "At bevæge dig eller tale så langsomt, at andre mennesker kunne have bemærket det, eller det modsatte – at være så nervøs eller rastløs, at du har bevæget dig meget mere end normalt?"
 
   utter_ask_question9:
-  - text: "Thoughts that you would be better off dead or of hurting yourself in some way"
   - text: "Tanker om, at du ville være bedre stillet død eller at skade dig selv på en eller anden måde?"
 
   utter_End_PROM:
   - text: "Mange tak for at svare på disse helbredsspørgsmål! Du må have en fortsat god dag"
 
   utter_PROM_denyed:
-  - text: "It is recommended to fill out these PROM, so that healthcare providers can provide better care for you. Are you sure you don't want to take the PROM?"
   - text: "Det er anbefalet  at du svare på disse helbredsrelaterede spørgeskema, så sundhedsudbydere can give dig bedre behandling. Er du sikker på at du ikke vil udfylde helbredsrelaterede spørgeskemaet?"
 
   utter_PROM_been_denyed:
