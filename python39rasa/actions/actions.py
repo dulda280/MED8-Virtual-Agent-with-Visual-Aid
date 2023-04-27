@@ -115,9 +115,9 @@ class saveToFB(Action):
 
         firebase_admin.delete_app(default_app)
 
-        komplimentere = ["Super godt!", "Fantastisk!", "Godt klaret!", "Super duper!"]
+        komplimentere = ["Super godt! ", "Fantastisk! ", "Godt klaret! ", "Super duper! "]
         randomindex = random.randint(0, 3)
-        msg = komplimentere[randomindex] + f"Tak for at fortæller mig om {data}. Dit input var {input}. "
+        msg = f'{komplimentere[randomindex]} Tak for at fortælle mig om {data}. Du skrev {input}.'
         dispatcher.utter_message(text=msg)
 
         if datetime.today().strftime('%A') == datetime.today().strftime('%A'):
@@ -365,7 +365,8 @@ class contextTime(Action):
 
         firebase_admin.delete_app(default_app)
         msg = f"Mange tak, det er alt for nu. Du vil modtage en notifikation ved dette tidspunkt, der skal huske dig på at måle blodtryk og vægt. \n" \
-              f"Du kan bare skrive dine målinger her i chatten (fx “min vægt er 74” eller “min vægt i dag 83 kg (undlad 83kg) eller “mit blodtryk er 126/68”)"
+              f"Du kan bare skrive dine målinger her i chatten (fx “min vægt er 74” eller “min vægt i dag 83 kg (undlad 83kg) eller “mit blodtryk er 126/68”). \n" \
+              f"Skriv venligst dine målinger i to seperate beskeder."
 
         dispatcher.utter_message(text=msg)
         return []
@@ -413,7 +414,7 @@ class ValidateSimplePROMForm(FormValidationAction):
         if slot_value.lower() not in ALLOWED_ANSWERS:
             dispatcher.utter_message(text=f"Undskyld. Men dette er ikke et gyldigt svar")
             return {"question1": None}
-        dispatcher.utter_message(text=f"Mange tak. Her er næste spørgsmål")
+        #dispatcher.utter_message(text=f"Mange tak. Her er næste spørgsmål")
         return {"question1": slot_value}
 
     def validate_question2(
@@ -428,7 +429,7 @@ class ValidateSimplePROMForm(FormValidationAction):
         if slot_value.lower() not in ALLOWED_ANSWERS:
             dispatcher.utter_message(text=f"Undskyld. Men dette er ikke et gyldigt svar")
             return {"question2": None}
-        dispatcher.utter_message(text=f"Mange tak. Her er næste spørgsmål")
+        #dispatcher.utter_message(text=f"Mange tak. Her er næste spørgsmål")
         return {"question2": slot_value}
 
     def validate_question3(
@@ -443,7 +444,7 @@ class ValidateSimplePROMForm(FormValidationAction):
         if slot_value.lower() not in ALLOWED_ANSWERS:
             dispatcher.utter_message(text=f"Undskyld. Men dette er ikke et gyldigt svar")
             return {"question3": None}
-        dispatcher.utter_message(text=f"Mange tak. Her er næste spørgsmål")
+        #dispatcher.utter_message(text=f"Mange tak. Her er næste spørgsmål")
         return {"question3": slot_value}
 
     def validate_question4(
@@ -458,7 +459,7 @@ class ValidateSimplePROMForm(FormValidationAction):
         if slot_value.lower() not in ALLOWED_ANSWERS:
             dispatcher.utter_message(text=f"Undskyld. Men dette er ikke et gyldigt svar")
             return {"question4": None}
-        dispatcher.utter_message(text=f"Mange tak. Her er næste spørgsmål")
+        #dispatcher.utter_message(text=f"Mange tak. Her er næste spørgsmål")
         return {"question4": slot_value}
 
     def validate_question5(
@@ -473,7 +474,7 @@ class ValidateSimplePROMForm(FormValidationAction):
         if slot_value.lower() not in ALLOWED_ANSWERS:
             dispatcher.utter_message(text=f"Undskyld. Men dette er ikke et gyldigt svar")
             return {"question5": None}
-        dispatcher.utter_message(text=f"Mange tak. Her er næste spørgsmål")
+        #dispatcher.utter_message(text=f"Mange tak. Her er næste spørgsmål")
         return {"question5": slot_value}
 
     def validate_question6(
@@ -488,7 +489,7 @@ class ValidateSimplePROMForm(FormValidationAction):
         if slot_value.lower() not in ALLOWED_ANSWERS:
             dispatcher.utter_message(text=f"Undskyld. Men dette er ikke et gyldigt svar")
             return {"question6": None}
-        dispatcher.utter_message(text=f"Mange tak. Her er næste spørgsmål")
+        #dispatcher.utter_message(text=f"Mange tak. Her er næste spørgsmål")
         return {"question6": slot_value}
 
     def validate_question7(
@@ -503,7 +504,7 @@ class ValidateSimplePROMForm(FormValidationAction):
         if slot_value.lower() not in ALLOWED_ANSWERS:
             dispatcher.utter_message(text=f"Undskyld. Men dette er ikke et gyldigt svar")
             return {"question7": None}
-        dispatcher.utter_message(text=f"Mange tak. Her er næste spørgsmål")
+        #dispatcher.utter_message(text=f"Mange tak. Her er næste spørgsmål")
         return {"question7": slot_value}
 
     def validate_question8(
@@ -518,7 +519,7 @@ class ValidateSimplePROMForm(FormValidationAction):
         if slot_value.lower() not in ALLOWED_ANSWERS:
             dispatcher.utter_message(text=f"Undskyld. Men dette er ikke et gyldigt svar")
             return {"question8": None}
-        dispatcher.utter_message(text=f"Mange tak. Her er næste spørgsmål")
+        #dispatcher.utter_message(text=f"Mange tak. Her er næste spørgsmål")
         return {"question8": slot_value}
 
     def validate_question9(
@@ -533,5 +534,5 @@ class ValidateSimplePROMForm(FormValidationAction):
         if slot_value.lower() not in ALLOWED_ANSWERS:
             dispatcher.utter_message(text=f"Undskyld. Men dette er ikke et gyldigt svar")
             return {"question9": None}
-        dispatcher.utter_message(text=f"Mange tak. Her er næste spørgsmål")
+        #dispatcher.utter_message(text=f"Mange tak. Her er næste spørgsmål")
         return {"question9": slot_value}
