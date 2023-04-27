@@ -1,0 +1,6 @@
+[
+  {
+    "name": "data",
+    "pattern": "(\\bblod\\ tryk\\b|\\bvægt\\b)"
+  }
+]

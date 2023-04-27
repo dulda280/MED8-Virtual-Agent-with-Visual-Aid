@@ -1,0 +1,44 @@
+[
+  {
+    "tag_name": "entity",
+    "ids_to_tags": {
+      "1": "B-clock",
+      "2": "I-clock",
+      "3": "L-clock",
+      "4": "U-clock",
+      "5": "B-data",
+      "6": "I-data",
+      "7": "L-data",
+      "8": "U-data",
+      "9": "B-input",
+      "10": "I-input",
+      "11": "L-input",
+      "12": "U-input",
+      "13": "B-prom_answer",
+      "14": "I-prom_answer",
+      "15": "L-prom_answer",
+      "16": "U-prom_answer",
+      "0": "O"
+    },
+    "tags_to_ids": {
+      "B-clock": 1,
+      "I-clock": 2,
+      "L-clock": 3,
+      "U-clock": 4,
+      "B-data": 5,
+      "I-data": 6,
+      "L-data": 7,
+      "U-data": 8,
+      "B-input": 9,
+      "I-input": 10,
+      "L-input": 11,
+      "U-input": 12,
+      "B-prom_answer": 13,
+      "I-prom_answer": 14,
+      "L-prom_answer": 15,
+      "U-prom_answer": 16,
+      "O": 0
+    },
+    "num_tags": 17
+  }
+]

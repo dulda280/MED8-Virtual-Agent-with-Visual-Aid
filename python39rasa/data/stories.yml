@@ -23,42 +23,41 @@ stories:
   - intent: deny
   - action: utter_goodbye
 
-- story: prom 1 agree
+- story: save data
   steps:
-  - intent: test_prom1
-  - action: initiate_promone
-  - intent: affirm
-  - action: promoneqone
-  - intent: prom_Answer
-  - action: promoneqtwo
-  - intent: prom_Answer
-  - action: prom_end
+  - intent: save_data
+  - action: saveToFB
+  - checkpoint: data_saved
+  - slot_was_set:
+      - send_PROM: false
+  - action: EndMeasurements
 
-- story: prom 2 agree
+- story: start prom
   steps:
-  - intent: test_prom2
-  - action: initiate_promtwo
-  - intent: affirm
-  - action: promtwoqone
-  - intent: prom_Answer
-  - action: promtwoqtwo
-  - intent: prom_Answer
-  - action: prom_end
+  - checkpoint: data_saved
+  - slot_was_set:
+      - send_PROM: true
+  - action: initPROM
+  - checkpoint: start_prom
+  - intent: prom_agree
+  - action: simple_PROM_form
+  - active_loop: simple_PROM_form
 
-- story: prom 1 rescheduled
+- story: fully denyed prom
   steps:
-  - intent: test_prom1
-  - action: initiate_promone
+  - checkpoint: start_prom
   - intent: deny
-  - action: reschedule_prom
-  - intent: prom_reschedule
-  - action: prom_is_rescheduled
+  - action: utter_PROM_been_denyed
 
-- story: prom 2 rescheduled
+- story: welcome user
   steps:
-  - intent: test_prom2
-  - action: initiate_promtwo
-  - intent: deny
-  - action: reschedule_prom
-  - intent: prom_reschedule
-  - action: prom_is_rescheduled
+    - intent: greet
+    - action: measurementSetup
+    - intent: generic_context
+    - action: saveContext
+    - intent: generic_time
+    - action: contextTime
+
+
+
+

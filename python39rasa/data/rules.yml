@@ -16,27 +16,28 @@ rules:
     - intent: fetch_data
     - action: fetchData
 
-- rule: save data
-  steps:
-    - intent: save_data
-    - action: saveToFB
-
 - rule: get uid
   steps:
     - intent: get_uid
-<<<<<<< Updated upstream
-    - action: utterUID
-=======
     - action: utterUID
 
 - rule: welcome user
-  conversation_start: true  # this rule only applies at the beginning of a conversation
   steps:
     - intent: greet
     - action: measurementSetup
 
-- rule: reminder schedule
+- rule: Activate PROM form
   steps:
-    - intent: schedule_reminders
-    - action: reminderSetup
->>>>>>> Stashed changes
+  - intent: prom_agree
+  - action: simple_PROM_form
+  - active_loop: simple_PROM_form
+
+- rule: Submit PROM form
+  condition:
+  - active_loop: simple_PROM_form
+  steps:
+  - action: simple_PROM_form
+  - active_loop: null
+  - slot_was_set:
+    - requested_slot: null
+  - action: utter_End_PROM

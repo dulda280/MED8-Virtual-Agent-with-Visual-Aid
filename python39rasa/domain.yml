@@ -1,32 +1,106 @@
 version: "3.1"
 
+slots:
+  send_PROM:
+    type: bool
+    influence_conversation: true
+    mappings:
+    - type: custom
+  question1:
+    type: text
+    mappings:
+    - type: from_entity
+      entity: prom_answer
+  question2:
+    type: text
+    mappings:
+    - type: from_entity
+      entity: prom_answer
+  question3:
+    type: text
+    mappings:
+    - type: from_entity
+      entity: prom_answer
+  question4:
+    type: text
+    mappings:
+    - type: from_entity
+      entity: prom_answer
+  question5:
+    type: text
+    mappings:
+    - type: from_entity
+      entity: prom_answer
+  question6:
+    type: text
+    mappings:
+    - type: from_entity
+      entity: prom_answer
+  question7:
+    type: text
+    mappings:
+    - type: from_entity
+      entity: prom_answer
+  question8:
+    type: text
+    mappings:
+    - type: from_entity
+      entity: prom_answer
+  question9:
+    type: text
+    mappings:
+    - type: from_entity
+      entity: prom_answer
+
+forms:
+  simple_PROM_form:
+    required_slots:
+      - question1
+      - question2
+      - question3
+      - question4
+      - question5
+      - question6
+      - question7
+      - question8
+      - question9
+
+
+
+
 intents:
-  - greet
-  - goodbye
-  - affirm
-  - deny
-  - mood_great
-  - mood_unhappy
-  - bot_challenge
-  - fetch_data
-  - blood_pressure
-  - feeling_recently
-  - mood_recently
-  - prom_reschedule
-  - start_PROM
-  - test_prom1
-  - prom_Answer
-  - test_prom2
-  - save_data
-  - get_uid
-  - schedule_reminders
+- greet
+- goodbye
+- affirm
+- deny
+- mood_great
+- mood_unhappy
+- bot_challenge
+- fetch_data
+- blood_pressure
+- feeling_recently
+- mood_recently
+- prom_reschedule
+- start_PROM
+- prom_Answer
+- save_data
+- get_uid
+- schedule_reminders
+- prom_agree
+- answer_prom
+- inform
+- generic_context
+- generic_time
 entities:
-  - data
-  - input
+- data
+- input
+- send_PROM
+- prom_answer
+
 
 responses:
   utter_greet:
-  - text: "Hey! How are you?"
+  - text: "Hej. Hvordan har du det?"
 
   utter_daily:
   - text: "Hey! Remember to take your daily measurements."
@@ -51,23 +125,78 @@ responses:
   - text: "I am a bot, powered by Rasa."
 
   utter_blood_pressure:
-      - text: "How has your blood pressure been lately?"
+  - text: "How has your blood pressure been lately?"
 
   utter_feeling_recently:
-      - text: "How have you been feeling recently?"
+  - text: "How have you been feeling recently?"
 
   utter_mood_recently:
-      - text: "How has your mood been recently?"
+  - text: "How has your mood been recently?"
 
   utter_prom_reschedule:
-    - text: "Would you like to reschedule your PROM?"
+  - text: "Great the PROM have been rescheduled"
 
   utter_welcome:
-    - text: "Hi there! What can I help you with today?"
+  - text: "Hi there! What can I help you with today?"
 
-  reminderSetup:
-    - text: "Thank you! You are now ready to use the app"
+  utter_what_time:
+  - text: "Great! At what time do you do that?"
 
+  utter_reminderSetup:
+  - text: "Thank you! You are now ready to use the app"
+
+  utter_ask_question1:
+  - text: "Over the last 2 weeks, how often have you been bothered by any of the following problems?.\n
+  You can answer: Not at all, Several days, More than half the days or Nearly every day.\n
+  Little interest or pleasure in doing things"
+  - text: "Over de sidste 2 uger, hvor ofte har du oplevet disse følgende ting?\n
+  Du kan svare: overhovedet ikke, nogle dage, mere en halvdelen af dagene eller næsten hver dag.\n
+  En lille interesse eller nydelse i at gøre ting?"
+
+  utter_ask_question2:
+  - text: "Feeling down, depressed, or hopeless"
+  - text: "Følte dig nede, deprimeret eller håbløs"
+
+  utter_ask_question3:
+  - text: "Trouble falling or staying asleep, or sleeping too much"
+  - text: "Problemer med at falde i søvn eller forblive sovende eller sove for meget?"
+
+  utter_ask_question4:
+  - text: "Feeling tired or having little energy"
+  - text: "Følte dig træt eller have meget lidt energi?"
+
+  utter_ask_question5:
+  - text: "Poor appetite or overeating"
+  - text: "Lav appetit eller overspisning?"
+
+  utter_ask_question6:
+  - text: "Feeling bad about yourself—or that you are a failure or have let yourself or your family down"
+  - text: "At have det dårligt med dig selv – eller at du føler dig som en fiasko eller at du har svigtet dig selv eller din familie?"
+
+  utter_ask_question7:
+  - text: "Trouble concentrating on things, such as reading the newspaper or watching television"
+  - text: "Problemer med at koncentrere dig om ting, såsom at læse avisen eller se fjernsyn?"
+
+  utter_ask_question8:
+  - text: "Moving or speaking so slowly that other people could have noticed, or the opposite—being so fidgety or restless that you have been moving around a lot more than usual"
+  - text: "At bevæge dig eller tale så langsomt, at andre mennesker kunne have bemærket det, eller det modsatte – at være så nervøs eller rastløs, at du har bevæget dig meget mere end normalt?"
+
+  utter_ask_question9:
+  - text: "Thoughts that you would be better off dead or of hurting yourself in some way"
+  - text: "Tanker om, at du ville være bedre stillet død eller at skade dig selv på en eller anden måde?"
+
+  utter_End_PROM:
+  - text: "Mange tak for at svare på disse helbredsspørgsmål! Du må have en fortsat god dag"
+
+  utter_PROM_denyed:
+  - text: "It is recommended to fill out these PROM, so that healthcare providers can provide better care for you. Are you sure you don't want to take the PROM?"
+  - text: "Det er anbefalet  at du svare på disse helbredsrelaterede spørgeskema, så sundhedsudbydere can give dig bedre behandling. Er du sikker på at du ikke vil udfylde helbredsrelaterede spørgeskemaet?"
+
+  utter_PROM_been_denyed:
+  - text: "Ok. Vi ses i morgen"
+
+  utter_great:
+  - text: "great let us get started!\nOver the last 2 weeks, how often have you been bothered by any of the following problems?.\nYou can answer: Not at all, Several days, More than half the days or Nearly every day.\nLittle interest or pleasure in doing things"
 
 
 
@@ -76,20 +205,26 @@ session_config:
   carry_over_slots_to_new_session: true
 
 actions:
-  - fetchData
-  - saveData
-  - initiate_promone
-  - initiate_promtwo
-  - promoneqone
-  - promoneqtwo
-  - promtwoqone
-  - promtwoqtwo
-  - prom_end
-  - saveToFB
-  - reschedule_prom
-  - prom_is_rescheduled
-  - saveWToFB
-  - saveBPToFB
-  - utterUID
-  - measurementSetup
-  - reminderSetup
+- fetchData
+- save_data
+- initiate_promone
+- initiate_promtwo
+- promoneqone
+- promoneqtwo
+- promtwoqone
+- promtwoqtwo
+- prom_end
+- saveToFB
+- reschedule_prom
+- prom_is_rescheduled
+- saveWToFB
+- saveBPToFB
+- utterUID
+- measurementSetup
+- reminderSetup
+- initPROM
+- EndMeasurements
+- utter_End_PROM
+- validate_simple_PROM_form
+- saveContext
+- contextTime

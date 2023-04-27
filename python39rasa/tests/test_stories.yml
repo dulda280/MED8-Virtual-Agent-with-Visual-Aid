@@ -89,3 +89,61 @@ stories:
       are you a bot?
     intent: bot_challenge
   - action: utter_iamabot
+
+- story: prom 1 agree
+  steps:
+  - intent: affirm
+  - action: promoneqone
+  - intent: prom_Answer
+  - action: promoneqtwo
+  - intent: prom_Answer
+  - action: prom_end
+
+- story: prom 2 agree
+  steps:
+  - intent: test_prom2
+  - action: initiate_promtwo
+  - intent: affirm
+  - action: promtwoqone
+  - intent: prom_Answer
+  - action: promtwoqtwo
+  - intent: prom_Answer
+  - action: prom_end
+
+- story: prom 1 rescheduled
+  steps:
+  - intent: test_prom1
+  - action: initiate_promone
+  - intent: deny
+  - action: reschedule_prom
+  - intent: prom_reschedule
+  - action: prom_is_rescheduled
+
+- story: prom 2 rescheduled
+  steps:
+  - intent: test_prom2
+  - action: initiate_promtwo
+  - intent: deny
+  - action: reschedule_prom
+  - intent: prom_reschedule
+  - action: prom_is_rescheduled
+
+- story: save data
+  steps:
+  - intent: save_data
+  - action: saveToFB
+  - checkpoint: data_saved
+  - slot_was_set:
+      - send_PROM: false
+  - action: EndMeasurements
+
+- story: start prom
+  steps:
+  - checkpoint: data_saved
+  - slot_was_set:
+      - send_PROM: true
+  - action: initPROM
+
+
+
+

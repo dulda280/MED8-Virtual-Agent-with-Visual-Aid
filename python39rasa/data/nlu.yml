@@ -2,14 +2,6 @@ version: "3.1"
 
 nlu:
 
-- intent: daily
-  examples: |
-    - Yes, my measurements are ...
-    - My measurements are ...
-    - Not now
-    - I want to do it later
-    - I would like to do it later
-
 - intent: greet
   examples: |
     - hey
@@ -28,12 +20,16 @@ nlu:
     - sup dude
     - sur dude
     - my dude
-    
-- intent: start_PROM
-  examples: |
-    - Yes. Let us get started.
-    - No. I need to do something right now.
-    - How long is it going to take?
+    - hey
+    - hej
+    - hallo
+    - hello
+    - hej der
+    - goddag
+    - godmorgen
+    - godaften
+    - sur
+    - sup
     
 - intent: goodbye
   examples: |
@@ -50,6 +46,12 @@ nlu:
     - later skater
     - it was nice to meet you
     - hope to see you again
+    - vi ses
+    - godnat
+    - farvel
+    - vi ses
+    - godt at møde dig
+    - tak for i dag
 
 - intent: affirm
   examples: |
@@ -59,6 +61,12 @@ nlu:
     - of course
     - that sounds good
     - correct
+    - ja
+    - enig
+    - selvfølgelig
+    - det lyder fint
+    - det lyder godt
+    - korrekt
 
 - intent: deny
   examples: |
@@ -69,6 +77,11 @@ nlu:
     - don't like that
     - no way
     - not really
+    - nej
+    - aldrig
+    - på ingen måde
+    - det tror jeg ikke
+    - ikke rigitg
 
 - intent: mood_great
   examples: |
@@ -86,6 +99,16 @@ nlu:
     - so so perfect
     - so good
     - so perfect
+    - perfekt
+    - fantastisk
+    - godt
+    - jeg har det godt
+    - jeg har det fantastisk
+    - jeg har det perfekt
+    - ekstrem godt
+    - jeg er glad
+    - jeg er virklig glad
+    
 
 - intent: mood_unhappy
   examples: |
@@ -103,6 +126,15 @@ nlu:
     - extremly sad
     - so saad
     - so sad
+    - jeg har det forfærdeligt
+    - jeg har det dårligt
+    - jeg har det ikke godt
+    - jeg er ked af det
+    - ked af det
+    - ikke godt
+    - ekstremt dårligt
+    - så ked af det
+    - jeg er ikke glad
 
 - intent: bot_challenge
   examples: |
@@ -110,23 +142,32 @@ nlu:
     - are you a human?
     - am I talking to a bot?
     - am I talking to a human?
+    - er du en bot?
+    - er du et menneske?
+    - snakker jeg med en bot?
+    - snakker jeg med et menneske?
 
 - intent: save_data
   examples: |
-    - my [blood pressure](data) for today is [150/85](input)
-    - my [weight](data) for today is [80](input)
-
-- intent: fetch_data
-  examples: |
-    - how has my [blood pressure](data) been?
-    - how has my [depression](data) been?
-    - how has my [weight](data) been?
+    - mit [blodtryk](data) for i dag er [150/85](input)
+    - min [vægt](data) kg for i dag er [80](input)
+    - [blodtryk](data) [185/75](input)
+    - [vægt](data) [75](data)
+    - [196/94](input) [blodtryk](data)
+    - [95](data) [vægt](data)
+    - mit [blodtryk](data) er [183/64](input)
+    - min [vægt](data) kg er [65](input)
+    - mit [blodtryk](data) er faldet til [149/65](input)
+    - min [vægt](data) er faldet til [79](input)
+    - mit [blodtryk](data) er stiget til [173/95](input)
+    - min [vægt](data) kg er stiget til [73](input)
+    - jeg vejer [vægt](data) i dag
+    - jeg vejer i dag [vægt](data) kg
 
 - lookup: data
   examples: |
-    - blood pressure
-    - depression
-    - weight
+    - blodtryk
+    - vægt
     
 - intent: blood_pressure
   examples: |
@@ -178,35 +219,35 @@ nlu:
     - I've been sad
     - I've been happy
 
-
-- intent: prom_Answer
+- intent: prom_agree
   examples: |
-    - [very bad](answer)
-    - [somewhat bad](answer)
-    - [neutral](answer)
-    - [somewhat good](answer)
-    - [very good](answer)
+    - yes i would like that
+    - I'll take the PROM
+    - why not
+    - sure
+    - i'd like to answer the prom
+    - i want the PROM
+    - can i get the PROM
+    - I'm interested in answering the PROM
+    - i want to answer the prom
+    - ja det vil være fint
+    - hvorfor ikke?
+    - klart
+    - jeg tager prom
+    - kan jeg tage promen?
+    - jeg vil gerne svare promen
+    - jeg vil gerne have promen
+    - jeg vil gerne tage promen
+    - ja
+    - selvfølgelig
 
-- lookup: answer
+- intent: inform
   examples: |
-    - very bad
-    - somewhat bad
-    - neutral
-    - somewhat good
-    - very good
+    - [overhovedet ikke](prom_answer)
+    - [nogle dage](prom_answer)
+    - [mere en halvdelen af dagene](prom_answer)
+    - [næsten hver dag](prom_answer)
 
-- intent: prom_reschedule
-  examples: |
-    - I would like to [11:00]{"entity":"clock","value":"time"}
-    - [10:00]{"entity":"clock","value":"time"} would be great
-
-- intent: test_prom1
-  examples: |
-    - test PROM1
-
-- intent: test_prom2
-  examples: |
-    - test PROM2
 
 - intent: get_uid
   examples: |
@@ -214,8 +255,35 @@ nlu:
     - can I get my uid?
     - get my uid?
 
-- intent: schedule_reminders
+- intent: generic_time
   examples: |
     - I would like to be reminded at 12:30
     - The reminder should be given at 17:15
     - At 13:45 would be greate
+    - i would like the reminder at 11:00
+    - reminder at 10:00 would be great
+    - det gør jeg klokken 18:30
+    - klokken 15:45
+    - hver dag klokken 13:15
+    - omkring klokken 08:30
+    - cirka klokken 8
+    - klokken 10
+    - 13:45
+    
+
+- intent: generic_context
+  examples: |
+    - i have breakfast every morning
+    - i brush my teeth as the last thing in the morning
+    - the last thing i do in the evening is brushing my teeth
+    - i have lunch the same time every day
+    - i shower same time every day
+    - jeg børster tænder hver morgen
+    - jeg børster tænder hver aften
+    - det første jeg gør er at tage et bad
+    - jeg slutter dagen af med at læse
+    - jeg spiser aftensmad det samme tidpunkt hver dag
+    - jeg står op samme tidspunkt hverdag
+    - jeg spiser morgenmad hver morgen
+    - jeg går i seng samme tidpunkt hver dag
+    - jeg spiser frokost samme tidspunkt her dag

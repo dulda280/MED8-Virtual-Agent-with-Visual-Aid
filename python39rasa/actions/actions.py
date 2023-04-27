@@ -1,12 +1,19 @@
+import random
 from typing import Any, Text, Dict, List
-from rasa_sdk import Action, Tracker
+
+from rasa_sdk import Action, Tracker, FormValidationAction
 from rasa_sdk.executor import CollectingDispatcher
+from rasa_sdk.events import EventType
+from rasa_sdk.executor import CollectingDispatcher
+from rasa_sdk.types import DomainDict
+from rasa_sdk.events import SlotSet
+
+import firebase_admin
+from firebase_admin import firestore
 from firebase_admin import db
+from datetime import datetime
 
 import pandas as pd
-import datetime
-import math
-import firebase_admin
 import csv
 from spellchecker import SpellChecker
 
@@ -43,18 +50,15 @@ class saveToFB(Action):
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
         data = next(tracker.get_latest_entity_values("data"), None)
         input = next(tracker.get_latest_entity_values("input"), None)
-        #userId = tracker.sender_id
-        userId = 24658147
+        userId = tracker.sender_id
 
-        cred_obj = firebase_admin.credentials.Certificate("resq-rasachatbot-firebase-adminsdk-uxb51-8aa0ff5053.json")
-        default_app = firebase_admin.initialize_app(cred_obj, {
-            "databaseURL": "https://resq-rasachatbot-default-rtdb.europe-west1.firebasedatabase.app/"
-        })
+        cred_obj = firebase_admin.credentials.Certificate("resq-rasachatbot-firebase-adminsdk-uxb51-131fdcdccc.json")
+        default_app = firebase_admin.initialize_app(cred_obj)
+        db = firestore.client()
 
-        # when a user updates the measurements
-        ref = db.reference("/measurement Table/" + str(userId))
-
-        dict = ref.get()
+        doc_ref = db.collection(u'measurement_test').document(str(userId))
+        collection = db.collection(u'measurement_test')
+        docs = collection.stream()
 
         spell = SpellChecker()
 
@@ -64,38 +68,76 @@ class saveToFB(Action):
 
         for index, word in enumerate(text):
             if word in misspelled:
-                print(word)
                 text[index] = spell.correction(word)
-                print(text[index])
 
         newtext = ' '.join(text)
-        print(newtext)
 
-        if newtext == "blood pressure":
+        if data == "blodtryk":
             inputList = input.split("/", 2)
 
-            dict["sysbp"].append(int(inputList[0]))
-            dict["diabp"].append(int(inputList[1]))
+            for doc in docs:
+                if doc.id == str(userId):
+                    sysList = doc.to_dict()["sysbp"]
+                    sysList.append(int(inputList[0]))
 
-        elif newtext == "weight":
-            dict["weight"].append(int(input))
+                    diaList = doc.to_dict()["diabp"]
+                    diaList.append(int(inputList[1]))
+
+                    indexList = doc.to_dict()["index"]
+                    indexList.append(len(indexList))
+                    doc_ref.set({
+                        u'diabp': diaList,
+                        u'sysbp': sysList,
+                        u'weight': doc.to_dict()["weight"],
+                        u'index': indexList,
+                        u'UID': str(userId)
+                    })
+
+        elif data == "vægt":
+            for doc in docs:
+                if doc.id == str(userId):
+                    weightList = doc.to_dict()["weight"]
+                    weightList.append(int(input))
+                    doc_ref.set({
+                        u'diabp': doc.to_dict()["diabp"],
+                        u'sysbp': doc.to_dict()["sysbp"],
+                        u'weight': weightList,
+                        u'index': doc.to_dict()["index"],
+                        u'UID': str(userId)
+                    })
 
         else:
-            msg = f"Sorry. I think you misspelled. Could you repeat it for me?"
-
-            ref.set(dict)
+            msg = f"Undskyld. Men jeg tror at du kom til at stave forkert. Kan du gentage?"
             firebase_admin.delete_app(default_app)
 
             dispatcher.utter_message(text=msg)
             return []
 
-        ref.set(dict)
         firebase_admin.delete_app(default_app)
 
-        msg = f"Thank you for telling me about your {newtext}. Your input was {input}. "
+        komplimentere = ["Super godt!", "Fantastisk!", "Godt klaret!", "Super duper!"]
+        randomindex = random.randint(0, 3)
+        msg = komplimentere[randomindex] + f"Tak for at fortæller mig om {data}. Dit input var {input}. "
+        dispatcher.utter_message(text=msg)
+
+        if datetime.today().strftime('%A') == datetime.today().strftime('%A'):
+            #"Wednesday":
+            return [SlotSet("send_PROM", True)]
+        else:
+            return [SlotSet("send_PROM", False)]
+
+class EndMeasurements(Action):
+
+    def name(self) -> Text:
+        return "EndMeasurements"
+
+    def run(self, dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+
+        msg = f"Det var det for i dag. Vi snakkes ved i morgen!"
         dispatcher.utter_message(text=msg)
         return []
-
 
 class saveData(Action):
 
@@ -221,7 +263,7 @@ class prom_end(Action):
     def run(self, dispatcher: CollectingDispatcher,
             tracker: Tracker,
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
-        msg = f"Thank you for your answers"
+        msg = f"Mange tak for dine svar"
         dispatcher.utter_message(text=msg)
         return []
 
@@ -248,37 +290,85 @@ class measurementSetup(Action):
 
         UID = tracker.sender_id
 
-        cred_obj = firebase_admin.credentials.Certificate("resq-rasachatbot-firebase-adminsdk-uxb51-8aa0ff5053.json")
-        default_app = firebase_admin.initialize_app(cred_obj, {
-            "databaseURL": "https://resq-rasachatbot-default-rtdb.europe-west1.firebasedatabase.app/"
+        cred_obj = firebase_admin.credentials.Certificate("resq-rasachatbot-firebase-adminsdk-uxb51-131fdcdccc.json")
+        default_app = firebase_admin.initialize_app(cred_obj)
+        db = firestore.client()
+
+        doc_ref = db.collection(u'measurement_test').document(str(UID))
+        doc_ref.set({
+            u'diabp': [0],
+            u'sysbp': [0],
+            u'weight': [0],
+            u'index': [0],
+            u'UID': str(UID)
         })
 
-        ref = db.reference("/measurement Table")
-
-        dict = ref.get()
-
-        newEntry = {
-            'diabp': [0],
-            'sysbp': [0],
-            'weight': [0]
-        }
-
-        dict[str(UID)] = newEntry
-
-        ref.set(dict)
         firebase_admin.delete_app(default_app)
 
-        msg = f"Hello! Welcome to rasa."
-        dispatcher.utter_message(text=msg)
-
-        msg = f"We are going to help you build habits, of measuring bodily functions and answering PROMs"
-        dispatcher.utter_message(text=msg)
-
-        msg = f"First we need to know what time you like to take these bodily functions?"
+        msg = f"Hej og velkommen til. Jeg er Vera, din personlige assistent. \n"\
+            f"Jeg vil hjælpe dig med dagligt at holde øje med dit blodtryk og din vægt. En gang imellem har jeg også et kort spørgeskema til dig, som kan hjælpe sundhedspersonale med at få indsigt i dit mentale helbred. \n"\
+            f"Først vil jeg gerne vide om der er en ting du gør hver dag, som er en del af en rutine eller lignende, hvor du har tid til også at veje dig og måle dit blodtryk. Det kunne fx være inden du går i seng eller efter du har børstet tænder."
         dispatcher.utter_message(text=msg)
 
         return []
 
+class saveContext(Action):
+    def name(self) -> Text:
+        return "saveContext"
+
+    def run(self, dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+        message = tracker.latest_message.get('text')
+        UID = tracker.sender_id
+
+        cred_obj = firebase_admin.credentials.Certificate("resq-rasachatbot-firebase-adminsdk-uxb51-131fdcdccc.json")
+        default_app = firebase_admin.initialize_app(cred_obj)
+        db = firestore.client()
+
+        doc_ref = db.collection(u'notification_table').document(str(UID))
+        doc_ref.set({
+            u'text': message,
+            u'UID': str(UID)
+        })
+
+        firebase_admin.delete_app(default_app)
+
+        msg = f"Fantastisk! Hvad er klokken typisk når du gør det?"
+        dispatcher.utter_message(text=msg)
+        return []
+
+class contextTime(Action):
+    def name(self) -> Text:
+        return "contextTime"
+
+    def run(self, dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+        message = tracker.latest_message.get('text')
+        UID = tracker.sender_id
+
+        cred_obj = firebase_admin.credentials.Certificate("resq-rasachatbot-firebase-adminsdk-uxb51-131fdcdccc.json")
+        default_app = firebase_admin.initialize_app(cred_obj)
+        db = firestore.client()
+
+        collection = db.collection(u'notification_table')
+        docs = collection.stream()
+        for doc in docs:
+            if doc.id == str(UID):
+                doc_ref = db.collection(u'notification_table').document(str(UID))
+                doc_ref.set({
+                    u'text': doc.to_dict()["text"],
+                    u'time': message,
+                    u'uid': str(UID)
+                })
+
+        firebase_admin.delete_app(default_app)
+        msg = f"Mange tak, det er alt for nu. Du vil modtage en notifikation ved dette tidspunkt, der skal huske dig på at måle blodtryk og vægt. \n" \
+              f"Du kan bare skrive dine målinger her i chatten (fx “min vægt er 74” eller “min vægt i dag 83 kg (undlad 83kg) eller “mit blodtryk er 126/68”)"
+
+        dispatcher.utter_message(text=msg)
+        return []
 class reminderSetup(Action):
 
     def name(self) -> Text:
@@ -290,3 +380,158 @@ class reminderSetup(Action):
         msg = f"Thank you for setting up the reminders!"
         dispatcher.utter_message(text=msg)
         return []
+
+class initPROM(Action):
+    def name(self) -> Text:
+        return "initPROM"
+
+    def run(self, dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+
+        msg = f"Jeg har et kort spørgeskema omkring dit helbred til dig i dag. Vil du gerne udfylde den nu?"
+        dispatcher.utter_message(text=msg)
+        return []
+
+ALLOWED_ANSWERS = [
+    "overhovedet ikke", "nogle dage", "mere en halvdelen af dagene", "næsten hver dag"
+]
+
+class ValidateSimplePROMForm(FormValidationAction):
+    def name(self) -> Text:
+        return "validate_simple_PROM_form"
+
+    def validate_question1(
+        self,
+        slot_value: Any,
+        dispatcher: CollectingDispatcher,
+        tracker: Tracker,
+        domain: DomainDict,
+    ) -> Dict[Text, Any]:
+        """Validate `pizza_size` value."""
+
+        if slot_value.lower() not in ALLOWED_ANSWERS:
+            dispatcher.utter_message(text=f"Undskyld. Men dette er ikke et gyldigt svar")
+            return {"question1": None}
+        dispatcher.utter_message(text=f"Mange tak. Her er næste spørgsmål")
+        return {"question1": slot_value}
+
+    def validate_question2(
+        self,
+        slot_value: Any,
+        dispatcher: CollectingDispatcher,
+        tracker: Tracker,
+        domain: DomainDict,
+    ) -> Dict[Text, Any]:
+        """Validate `pizza_size` value."""
+
+        if slot_value.lower() not in ALLOWED_ANSWERS:
+            dispatcher.utter_message(text=f"Undskyld. Men dette er ikke et gyldigt svar")
+            return {"question2": None}
+        dispatcher.utter_message(text=f"Mange tak. Her er næste spørgsmål")
+        return {"question2": slot_value}
+
+    def validate_question3(
+        self,
+        slot_value: Any,
+        dispatcher: CollectingDispatcher,
+        tracker: Tracker,
+        domain: DomainDict,
+    ) -> Dict[Text, Any]:
+        """Validate `pizza_size` value."""
+
+        if slot_value.lower() not in ALLOWED_ANSWERS:
+            dispatcher.utter_message(text=f"Undskyld. Men dette er ikke et gyldigt svar")
+            return {"question3": None}
+        dispatcher.utter_message(text=f"Mange tak. Her er næste spørgsmål")
+        return {"question3": slot_value}
+
+    def validate_question4(
+            self,
+            slot_value: Any,
+            dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: DomainDict,
+    ) -> Dict[Text, Any]:
+        """Validate `pizza_size` value."""
+
+        if slot_value.lower() not in ALLOWED_ANSWERS:
+            dispatcher.utter_message(text=f"Undskyld. Men dette er ikke et gyldigt svar")
+            return {"question4": None}
+        dispatcher.utter_message(text=f"Mange tak. Her er næste spørgsmål")
+        return {"question4": slot_value}
+
+    def validate_question5(
+            self,
+            slot_value: Any,
+            dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: DomainDict,
+    ) -> Dict[Text, Any]:
+        """Validate `pizza_size` value."""
+
+        if slot_value.lower() not in ALLOWED_ANSWERS:
+            dispatcher.utter_message(text=f"Undskyld. Men dette er ikke et gyldigt svar")
+            return {"question5": None}
+        dispatcher.utter_message(text=f"Mange tak. Her er næste spørgsmål")
+        return {"question5": slot_value}
+
+    def validate_question6(
+            self,
+            slot_value: Any,
+            dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: DomainDict,
+    ) -> Dict[Text, Any]:
+        """Validate `pizza_size` value."""
+
+        if slot_value.lower() not in ALLOWED_ANSWERS:
+            dispatcher.utter_message(text=f"Undskyld. Men dette er ikke et gyldigt svar")
+            return {"question6": None}
+        dispatcher.utter_message(text=f"Mange tak. Her er næste spørgsmål")
+        return {"question6": slot_value}
+
+    def validate_question7(
+            self,
+            slot_value: Any,
+            dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: DomainDict,
+    ) -> Dict[Text, Any]:
+        """Validate `pizza_size` value."""
+
+        if slot_value.lower() not in ALLOWED_ANSWERS:
+            dispatcher.utter_message(text=f"Undskyld. Men dette er ikke et gyldigt svar")
+            return {"question7": None}
+        dispatcher.utter_message(text=f"Mange tak. Her er næste spørgsmål")
+        return {"question7": slot_value}
+
+    def validate_question8(
+            self,
+            slot_value: Any,
+            dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: DomainDict,
+    ) -> Dict[Text, Any]:
+        """Validate `pizza_size` value."""
+
+        if slot_value.lower() not in ALLOWED_ANSWERS:
+            dispatcher.utter_message(text=f"Undskyld. Men dette er ikke et gyldigt svar")
+            return {"question8": None}
+        dispatcher.utter_message(text=f"Mange tak. Her er næste spørgsmål")
+        return {"question8": slot_value}
+
+    def validate_question9(
+            self,
+            slot_value: Any,
+            dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: DomainDict,
+    ) -> Dict[Text, Any]:
+        """Validate `pizza_size` value."""
+
+        if slot_value.lower() not in ALLOWED_ANSWERS:
+            dispatcher.utter_message(text=f"Undskyld. Men dette er ikke et gyldigt svar")
+            return {"question9": None}
+        dispatcher.utter_message(text=f"Mange tak. Her er næste spørgsmål")
+        return {"question9": slot_value}

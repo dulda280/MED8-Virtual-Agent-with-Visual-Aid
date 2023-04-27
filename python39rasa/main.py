@@ -3,28 +3,24 @@ import firebase_admin
 import json
 import language_tool_python
 
-from firebase_admin import db
+from firebase_admin import firestore
+from datetime import datetime
 
-cred_obj = firebase_admin.credentials.Certificate("resq-rasachatbot-firebase-adminsdk-uxb51-8aa0ff5053.json")
-default_app = firebase_admin.initialize_app(cred_obj, {
-    "databaseURL": "https://resq-rasachatbot-default-rtdb.europe-west1.firebasedatabase.app/"
+documentID = random.randint(10000000, 99999999)
+UID = 31907214
+    #random.randint(10000000, 99999999)
+
+cred_obj = firebase_admin.credentials.Certificate("resq-rasachatbot-firebase-adminsdk-uxb51-364866232b.json")
+default_app = firebase_admin.initialize_app(cred_obj)
+db = firestore.client()
+
+doc_ref = db.collection(u'measurement_test').document(str(documentID))
+doc_ref.set({
+    u'diabp': [0],
+    u'sysbp': [0],
+    u'weight': [0],
+    u'index': [0],
+    u'UID': str(UID)
 })
 
-UID = 54976352
-
-# when a user updates the measurements
-ref = db.reference("/measurement Table")
-
-dict = ref.get()
-
-newEntry = {
-  'diabp': [0],
-  'sysbp': [0],
-  'weight': [0]
-}
-
-dict[str(UID)] = newEntry
-
-ref.set(dict)
 firebase_admin.delete_app(default_app)
-print(dict)
