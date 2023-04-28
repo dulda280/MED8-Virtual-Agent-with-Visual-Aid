@@ -52,6 +52,8 @@ class saveToFB(Action):
         input = next(tracker.get_latest_entity_values("input"), None)
         userId = tracker.sender_id
 
+        PROMbool = False
+
         cred_obj = firebase_admin.credentials.Certificate("resq-rasachatbot-firebase-adminsdk-uxb51-131fdcdccc.json")
         default_app = firebase_admin.initialize_app(cred_obj)
         db = firestore.client()
@@ -74,9 +76,17 @@ class saveToFB(Action):
 
         if data == "blodtryk":
             inputList = input.split("/", 2)
-
             for doc in docs:
                 if doc.id == str(userId):
+
+                    PROMInt = doc.to_dict()["PROMbool"]
+                    if PROMInt == 1 and datetime.today().strftime('%A') == datetime.today().strftime('%A'):
+                        PROMInt = 0
+                        PROMbool = True
+                    if datetime.today().strftime('%A') != datetime.today().strftime('%A'):
+                        PROMInt = 1
+                        PROMbool = False
+
                     sysList = doc.to_dict()["sysbp"]
                     sysList.append(int(inputList[0]))
 
@@ -90,12 +100,22 @@ class saveToFB(Action):
                         u'sysbp': sysList,
                         u'weight': doc.to_dict()["weight"],
                         u'index': indexList,
-                        u'UID': str(userId)
+                        u'UID': str(userId),
+                        u'PROMbool': PROMInt
                     })
 
-        elif data == "vægt":
+        elif data == "vægt" or data == "vejer":
             for doc in docs:
                 if doc.id == str(userId):
+
+                    PROMInt = doc.to_dict()["PROMbool"]
+                    if PROMInt == 1 and datetime.today().strftime('%A') == datetime.today().strftime('%A'):
+                        PROMInt = 0
+                        PROMbool = True
+                    if datetime.today().strftime('%A') != datetime.today().strftime('%A'):
+                        PROMInt = 1
+                        PROMbool = False
+
                     weightList = doc.to_dict()["weight"]
                     weightList.append(int(input))
                     doc_ref.set({
@@ -103,7 +123,8 @@ class saveToFB(Action):
                         u'sysbp': doc.to_dict()["sysbp"],
                         u'weight': weightList,
                         u'index': doc.to_dict()["index"],
-                        u'UID': str(userId)
+                        u'UID': str(userId),
+                        u'PROMbool': PROMInt
                     })
 
         else:
@@ -120,10 +141,11 @@ class saveToFB(Action):
         msg = f'{komplimentere[randomindex]} Tak for at fortælle mig om {data}. Du skrev {input}.'
         dispatcher.utter_message(text=msg)
 
-        if datetime.today().strftime('%A') == datetime.today().strftime('%A'):
-            #"Wednesday":
+        if PROMbool == True:
+            PROMbool = False
             return [SlotSet("send_PROM", True)]
         else:
+            PROMbool = True
             return [SlotSet("send_PROM", False)]
 
 class EndMeasurements(Action):
@@ -300,7 +322,8 @@ class measurementSetup(Action):
             u'sysbp': [0],
             u'weight': [0],
             u'index': [0],
-            u'UID': str(UID)
+            u'UID': str(UID),
+            u'PROMbool': 0
         })
 
         firebase_admin.delete_app(default_app)
