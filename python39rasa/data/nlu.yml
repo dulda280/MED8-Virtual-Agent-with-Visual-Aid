@@ -67,6 +67,7 @@ nlu:
     - det lyder fint
     - det lyder godt
     - korrekt
+    - ja der har jeg
 
 - intent: deny
   examples: |
@@ -161,13 +162,15 @@ nlu:
     - min [vægt](data) er faldet til [79](input)
     - mit [blodtryk](data) er stiget til [173/95](input)
     - min [vægt](data) kg er stiget til [73](input)
-    - jeg vejer [vægt](data) i dag
-    - jeg vejer i dag [vægt](data) kg
+    - jeg [vejer](data) [95](input) i dag
+    - jeg [vejer](data) i dag [63](input) kg
+    - jeg [vejer](data) [73](input) kg
 
 - lookup: data
   examples: |
     - blodtryk
     - vægt
+    - vejer
     
 - intent: blood_pressure
   examples: |
@@ -245,7 +248,7 @@ nlu:
   examples: |
     - [overhovedet ikke](prom_answer)
     - [nogle dage](prom_answer)
-    - [mere en halvdelen af dagene](prom_answer)
+    - [mere end halvdelen af dagene](prom_answer)
     - [næsten hver dag](prom_answer)
 
 

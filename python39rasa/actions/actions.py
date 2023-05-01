@@ -40,6 +40,17 @@ class fetchData(Action):
         dispatcher.utter_message(text=msg)
         return []
 
+class resetSlots(Action):
+
+    def name(self) -> Text:
+        return "resetSlots"
+
+    def run(self, dispatcher: CollectingDispatcher,
+            tracker: Tracker,
+            domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
+
+        return []
+
 class saveToFB(Action):
 
     def name(self) -> Text:
@@ -62,70 +73,68 @@ class saveToFB(Action):
         collection = db.collection(u'measurement_test')
         docs = collection.stream()
 
-        spell = SpellChecker()
-
-        text = list(str(data).split(" "))
-        # find those words that may be misspelled
-        misspelled = spell.unknown(text)
-
-        for index, word in enumerate(text):
-            if word in misspelled:
-                text[index] = spell.correction(word)
-
-        newtext = ' '.join(text)
+        bpBool = False
+        weBool = False
 
         if data == "blodtryk":
-            inputList = input.split("/", 2)
-            for doc in docs:
-                if doc.id == str(userId):
+            try:
+                inputList = input.split("/", 2)
 
-                    PROMInt = doc.to_dict()["PROMbool"]
-                    if PROMInt == 1 and datetime.today().strftime('%A') == datetime.today().strftime('%A'):
-                        PROMInt = 0
-                        PROMbool = True
-                    if datetime.today().strftime('%A') != datetime.today().strftime('%A'):
-                        PROMInt = 1
-                        PROMbool = False
+                for doc in docs:
+                    if doc.id == str(userId):
 
-                    sysList = doc.to_dict()["sysbp"]
-                    sysList.append(int(inputList[0]))
+                        PROMInt = doc.to_dict()["PROMbool"]
+                        if PROMInt == 1 and datetime.today().strftime('%A') == datetime.today().strftime('%A'):
+                            PROMInt = 0
+                            PROMbool = True
+                        if datetime.today().strftime('%A') != datetime.today().strftime('%A'):
+                            PROMInt = 1
+                            PROMbool = False
 
-                    diaList = doc.to_dict()["diabp"]
-                    diaList.append(int(inputList[1]))
+                        sysList = doc.to_dict()["sysbp"]
+                        sysList.append(int(inputList[0]))
 
-                    indexList = doc.to_dict()["index"]
-                    indexList.append(len(indexList))
-                    doc_ref.set({
-                        u'diabp': diaList,
-                        u'sysbp': sysList,
-                        u'weight': doc.to_dict()["weight"],
-                        u'index': indexList,
-                        u'UID': str(userId),
-                        u'PROMbool': PROMInt
-                    })
+                        diaList = doc.to_dict()["diabp"]
+                        diaList.append(int(inputList[1]))
+
+                        indexList = doc.to_dict()["index"]
+                        indexList.append(len(indexList))
+                        doc_ref.set({
+                            u'diabp': diaList,
+                            u'sysbp': sysList,
+                            u'weight': doc.to_dict()["weight"],
+                            u'index': indexList,
+                            u'UID': str(userId),
+                            u'PROMbool': PROMInt
+                        })
+            except:
+                bpBool = True
 
         elif data == "vægt" or data == "vejer":
             for doc in docs:
                 if doc.id == str(userId):
 
-                    PROMInt = doc.to_dict()["PROMbool"]
-                    if PROMInt == 1 and datetime.today().strftime('%A') == datetime.today().strftime('%A'):
-                        PROMInt = 0
-                        PROMbool = True
-                    if datetime.today().strftime('%A') != datetime.today().strftime('%A'):
-                        PROMInt = 1
-                        PROMbool = False
+                    try:
+                        PROMInt = doc.to_dict()["PROMbool"]
+                        if PROMInt == 1 and datetime.today().strftime('%A') == datetime.today().strftime('%A'):
+                            PROMInt = 0
+                            PROMbool = True
+                        if datetime.today().strftime('%A') != datetime.today().strftime('%A'):
+                            PROMInt = 1
+                            PROMbool = False
 
-                    weightList = doc.to_dict()["weight"]
-                    weightList.append(int(input))
-                    doc_ref.set({
-                        u'diabp': doc.to_dict()["diabp"],
-                        u'sysbp': doc.to_dict()["sysbp"],
-                        u'weight': weightList,
-                        u'index': doc.to_dict()["index"],
-                        u'UID': str(userId),
-                        u'PROMbool': PROMInt
-                    })
+                        weightList = doc.to_dict()["weight"]
+                        weightList.append(int(input))
+                        doc_ref.set({
+                            u'diabp': doc.to_dict()["diabp"],
+                            u'sysbp': doc.to_dict()["sysbp"],
+                            u'weight': weightList,
+                            u'index': doc.to_dict()["index"],
+                            u'UID': str(userId),
+                            u'PROMbool': PROMInt
+                        })
+                    except:
+                        weBool = True
 
         else:
             msg = f"Undskyld. Men jeg tror at du kom til at stave forkert. Kan du gentage?"
@@ -134,12 +143,23 @@ class saveToFB(Action):
             dispatcher.utter_message(text=msg)
             return []
 
-        firebase_admin.delete_app(default_app)
+        if bpBool == True:
+            msg = 'Undskyld. Men du kom til at skrive dit blodtryk forkert. Husk at skrive det fx. 185/85 eller 174/96'
+            dispatcher.utter_message(text=msg)
+            firebase_admin.delete_app(default_app)
+            return []
+
+        if weBool == True:
+            msg = "undskyld. Men du kom til at skrive den vægt forkert. Husk at det enten uden kg eller med mellemrum imellem tallet of kg"
+            dispatcher.utter_message(text=msg)
+            firebase_admin.delete_app(default_app)
+            return []
 
         komplimentere = ["Super godt! ", "Fantastisk! ", "Godt klaret! ", "Super duper! "]
         randomindex = random.randint(0, 3)
         msg = f'{komplimentere[randomindex]} Tak for at fortælle mig om {data}. Du skrev {input}.'
         dispatcher.utter_message(text=msg)
+        firebase_admin.delete_app(default_app)
 
         if PROMbool == True:
             PROMbool = False
@@ -287,7 +307,11 @@ class prom_end(Action):
             domain: Dict[Text, Any]) -> List[Dict[Text, Any]]:
         msg = f"Mange tak for dine svar"
         dispatcher.utter_message(text=msg)
-        return []
+
+        return [SlotSet("question1", None), SlotSet("question2", None), SlotSet("question3", None),
+                SlotSet("question4", None), SlotSet("question5", None), SlotSet("question6", None),
+                SlotSet("question7", None), SlotSet("question8", None), SlotSet("question9", None)]
+
 
 class utterUID(Action):
     def name(self) -> Text:
@@ -316,24 +340,34 @@ class measurementSetup(Action):
         default_app = firebase_admin.initialize_app(cred_obj)
         db = firestore.client()
 
-        doc_ref = db.collection(u'measurement_test').document(str(UID))
-        doc_ref.set({
-            u'diabp': [0],
-            u'sysbp': [0],
-            u'weight': [0],
-            u'index': [0],
-            u'UID': str(UID),
-            u'PROMbool': 0
-        })
+        doc_ref = db.collection('measurement_test').document(str(UID))
+        doc = doc_ref.get()
 
-        firebase_admin.delete_app(default_app)
+        if doc.exists:
+            msg = "Hej. Har du nogle målinger til mig i dag?"
 
-        msg = f"Hej og velkommen til. Jeg er Vera, din personlige assistent. \n"\
-            f"Jeg vil hjælpe dig med dagligt at holde øje med dit blodtryk og din vægt. En gang imellem har jeg også et kort spørgeskema til dig, som kan hjælpe sundhedspersonale med at få indsigt i dit mentale helbred. \n"\
-            f"Først vil jeg gerne vide om der er en ting du gør hver dag, som er en del af en rutine eller lignende, hvor du har tid til også at veje dig og måle dit blodtryk. Det kunne fx være inden du går i seng eller efter du har børstet tænder."
-        dispatcher.utter_message(text=msg)
+            dispatcher.utter_message(text=msg)
+            firebase_admin.delete_app(default_app)
+            return []
 
-        return []
+        else:
+            doc_ref = db.collection(u'measurement_test').document(str(UID))
+            doc_ref.set({
+                u'diabp': [0],
+                u'sysbp': [0],
+                u'weight': [0],
+                u'index': [0],
+                u'UID': str(UID),
+                u'PROMbool': 0
+            })
+            msg = f"Hej og velkommen til. Jeg er Vera, din personlige assistent. \n" \
+                  f"Jeg vil hjælpe dig med dagligt at holde øje med dit blodtryk og din vægt. En gang imellem har jeg også et kort spørgeskema til dig, som kan hjælpe sundhedspersonale med at få indsigt i dit mentale helbred. \n" \
+                  f"Først vil jeg gerne vide om der er en ting du gør hver dag, som er en del af en rutine eller lignende, hvor du har tid til også at veje dig og måle dit blodtryk. Det kunne fx være inden du går i seng eller efter du har børstet tænder."
+
+            dispatcher.utter_message(text=msg)
+            firebase_admin.delete_app(default_app)
+            return []
+
 
 class saveContext(Action):
     def name(self) -> Text:
@@ -388,7 +422,7 @@ class contextTime(Action):
 
         firebase_admin.delete_app(default_app)
         msg = f"Mange tak, det er alt for nu. Du vil modtage en notifikation ved dette tidspunkt, der skal huske dig på at måle blodtryk og vægt. \n" \
-              f"Du kan bare skrive dine målinger her i chatten (fx “min vægt er 74” eller “min vægt i dag 83 kg (undlad 83kg) eller “mit blodtryk er 126/68”). \n" \
+              f"Du kan bare skrive dine målinger her i chatten (fx “min vægt er 74” eller “jeg vejer i dag 83 kg“ (undlad 83kg) eller “mit blodtryk er 126/68”). \n" \
               f"Skriv venligst dine målinger i to seperate beskeder."
 
         dispatcher.utter_message(text=msg)
@@ -418,7 +452,7 @@ class initPROM(Action):
         return []
 
 ALLOWED_ANSWERS = [
-    "overhovedet ikke", "nogle dage", "mere en halvdelen af dagene", "næsten hver dag"
+    "overhovedet ikke", "nogle dage", "mere end halvdelen af dagene", "næsten hver dag"
 ]
 
 class ValidateSimplePROMForm(FormValidationAction):
@@ -559,3 +593,4 @@ class ValidateSimplePROMForm(FormValidationAction):
             return {"question9": None}
         #dispatcher.utter_message(text=f"Mange tak. Her er næste spørgsmål")
         return {"question9": slot_value}
+

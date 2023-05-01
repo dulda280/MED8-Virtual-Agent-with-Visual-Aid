@@ -1,6 +1,11 @@
 version: "3.1"
 
 slots:
+  init_setup:
+    type: bool
+    influence_conversation: true
+    mappings:
+      - type: custom
   send_PROM:
     type: bool
     influence_conversation: true
@@ -96,11 +101,12 @@ entities:
 - input
 - send_PROM
 - prom_answer
+- init_setup
 
 
 responses:
   utter_greet:
-  - text: "Hej. Hvordan har du det?"
+  - text: "Hej. Har du nogle målinger til mig?"
 
   utter_daily:
   - text: "Hey! Remember to take your daily measurements."
@@ -186,7 +192,11 @@ responses:
   utter_great:
   - text: "great let us get started!\nOver the last 2 weeks, how often have you been bothered by any of the following problems?.\nYou can answer: Not at all, Several days, More than half the days or Nearly every day.\nLittle interest or pleasure in doing things"
 
+  utter_andet_data:
+  - text: "Har du en anden måling til mig?"
 
+  utter_hvad_er_data:
+  - text: "Fantastisk. Hvad er det?"
 
 session_config:
   session_expiration_time: 60
@@ -216,3 +226,4 @@ actions:
 - validate_simple_PROM_form
 - saveContext
 - contextTime
+- resetSlots

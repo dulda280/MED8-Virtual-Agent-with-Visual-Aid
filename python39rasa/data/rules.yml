@@ -41,3 +41,5 @@ rules:
   - slot_was_set:
     - requested_slot: null
   - action: utter_End_PROM
+  - action: resetSlots
+  - action: action_restart

@@ -1,0 +1,6 @@
+[
+  {
+    "name": "data",
+    "pattern": "(\\bblodtryk\\b|\\bvægt\\b|\\bvejer\\b)"
+  }
+]

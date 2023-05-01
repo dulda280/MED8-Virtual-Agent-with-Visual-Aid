@@ -23,13 +23,26 @@ stories:
   - intent: deny
   - action: utter_goodbye
 
-- story: save data
+- story: save data 1
   steps:
   - intent: save_data
   - action: saveToFB
   - checkpoint: data_saved
   - slot_was_set:
       - send_PROM: false
+  - action: utter_andet_data
+  - intent: affirm
+  - action: utter_hvad_er_data
+
+- story: save data 2
+  steps:
+  - intent: save_data
+  - action: saveToFB
+  - checkpoint: data_saved
+  - slot_was_set:
+      - send_PROM: false
+  - action: utter_andet_data
+  - intent: deny
   - action: EndMeasurements
 
 - story: start prom
