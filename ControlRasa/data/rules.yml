@@ -1,0 +1,19 @@
+version: "3.1"
+
+rules:
+- rule: Activate PROM form
+  steps:
+  - intent: prom_agree
+  - action: simple_PROM_form
+  - active_loop: simple_PROM_form
+
+- rule: Submit PROM form
+  condition:
+  - active_loop: simple_PROM_form
+  steps:
+  - action: simple_PROM_form
+  - active_loop: null
+  - slot_was_set:
+    - requested_slot: null
+  - action: utter_End_PROM
+  - action: action_restart

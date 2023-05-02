@@ -1,0 +1,168 @@
+version: "3.1"
+slots:
+  init_setup:
+    type: bool
+    influence_conversation: true
+    mappings:
+      - type: custom
+  send_PROM:
+    type: bool
+    influence_conversation: true
+    mappings:
+    - type: custom
+  question1:
+    type: text
+    mappings:
+    - type: from_entity
+      entity: prom_answer
+  question2:
+    type: text
+    mappings:
+    - type: from_entity
+      entity: prom_answer
+  question3:
+    type: text
+    mappings:
+    - type: from_entity
+      entity: prom_answer
+  question4:
+    type: text
+    mappings:
+    - type: from_entity
+      entity: prom_answer
+  question5:
+    type: text
+    mappings:
+    - type: from_entity
+      entity: prom_answer
+  question6:
+    type: text
+    mappings:
+    - type: from_entity
+      entity: prom_answer
+  question7:
+    type: text
+    mappings:
+    - type: from_entity
+      entity: prom_answer
+  question8:
+    type: text
+    mappings:
+    - type: from_entity
+      entity: prom_answer
+  question9:
+    type: text
+    mappings:
+    - type: from_entity
+      entity: prom_answer
+
+forms:
+  simple_PROM_form:
+    required_slots:
+      - question1
+      - question2
+      - question3
+      - question4
+      - question5
+      - question6
+      - question7
+      - question8
+      - question9
+
+entities:
+- data
+- input
+- send_PROM
+- prom_answer
+- init_setup
+
+intents:
+  - greet
+  - goodbye
+  - affirm
+  - deny
+  - mood_great
+  - mood_unhappy
+  - bot_challenge
+  - prom_agree
+  - inform
+
+responses:
+  utter_greet:
+  - text: "Hey! How are you?"
+
+  utter_cheer_up:
+  - text: "Here is something to cheer you up:"
+    image: "https://i.imgur.com/nGF1K8f.jpg"
+
+  utter_did_that_help:
+  - text: "Did that help you?"
+
+  utter_happy:
+  - text: "Great, carry on!"
+
+  utter_goodbye:
+  - text: "Bye"
+
+  utter_iamabot:
+  - text: "I am a bot, powered by Rasa."
+
+  utter_ask_question1:
+  - text: "Over de sidste 2 uger, hvor ofte har du oplevet disse følgende ting?\n
+  Du kan svare: overhovedet ikke, nogle dage, mere en halvdelen af dagene eller næsten hver dag.\n
+  En lille interesse eller nydelse i at gøre ting?"
+
+  utter_ask_question2:
+  - text: "Følte dig nede, deprimeret eller håbløs"
+
+  utter_ask_question3:
+  - text: "Problemer med at falde i søvn eller forblive sovende eller sove for meget?"
+
+  utter_ask_question4:
+  - text: "Følte dig træt eller have meget lidt energi?"
+
+  utter_ask_question5:
+  - text: "Lav appetit eller overspisning?"
+
+  utter_ask_question6:
+  - text: "At have det dårligt med dig selv – eller at du føler dig som en fiasko eller at du har svigtet dig selv eller din familie?"
+
+  utter_ask_question7:
+  - text: "Problemer med at koncentrere dig om ting, såsom at læse avisen eller se fjernsyn?"
+
+  utter_ask_question8:
+  - text: "At bevæge dig eller tale så langsomt, at andre mennesker kunne have bemærket det, eller det modsatte – at være så nervøs eller rastløs, at du har bevæget dig meget mere end normalt?"
+
+  utter_ask_question9:
+  - text: "Tanker om, at du ville være bedre stillet død eller at skade dig selv på en eller anden måde?"
+
+  utter_End_PROM:
+  - text: "Mange tak for at svare på disse helbredsspørgsmål! Du må have en fortsat god dag"
+
+session_config:
+  session_expiration_time: 60
+  carry_over_slots_to_new_session: true
+
+actions:
+- fetchData
+- save_data
+- initiate_promone
+- initiate_promtwo
+- promoneqone
+- promoneqtwo
+- promtwoqone
+- promtwoqtwo
+- prom_end
+- saveToFB
+- reschedule_prom
+- prom_is_rescheduled
+- saveWToFB
+- saveBPToFB
+- utterUID
+- measurementSetup
+- reminderSetup
+- initPROM
+- EndMeasurements
+- utter_End_PROM
+- validate_simple_PROM_form
+- resetSlots
